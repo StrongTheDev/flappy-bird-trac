@@ -18,5 +18,8 @@
     "trac-peer": "git+https://github.com/Trac-Systems/trac-peer.git#d108f52",
     "trac-wallet": "0.0.43-msb-r2.8",
     "util": "npm:bare-node-util"
+  },
+  "overrides": {
+    "trac-wallet": "0.0.43-msb-r2.8"
   }
 }

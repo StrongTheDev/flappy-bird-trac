@@ -84,6 +84,14 @@ cd intercom
 npm install
 ```
 
+If you see **Invalid key pair** or **null Peer Address** on startup, your dependency tree likely pulled the plaintext `trac-wallet@0.0.43`.  
+Fix by **forcing** `trac-wallet@0.0.43-msb-r2.8` via npm overrides and reinstall:
+```bash
+npm pkg set overrides.trac-wallet=0.0.43-msb-r2.8
+rm -rf node_modules package-lock.json
+npm install
+```
+
 ### Subnet/App Creation (Local‑First)
 Creating a subnet is **app creation** in Trac (comparable to deploying a contract on Ethereum).  
 It defines a **self‑custodial, local‑first app**: each peer stores its own data locally, and the admin controls who can write or index.
