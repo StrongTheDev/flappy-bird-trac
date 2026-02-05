@@ -440,6 +440,15 @@ Intercom must expose and describe all interactive commands so agents can operate
 4) **Entry channel (`0000intercom`) is fixed** and **open to all**: owner/welcome are optional.  
    If you want a canonical welcome, sign it once with the designated owner key and reuse the same `welcome_b64` across peers.
 
+### Wallet Usage (Do Not Generate New Keys)
+- **Default rule:** use the peer wallet from the store: `stores/<peer>/db/keypair.json`.  
+  Do **not** generate a new wallet for signing invites/welcomes.
+- Prefer **CLI signing** on the running peer:
+  - `/sc_welcome` and `/sc_invite` always sign with the **store wallet**.
+- If you must sign in code, **load from the store keypair** (do not call `generateKeyPair()`).
+- Wallet format: the project uses **`trac-wallet@1.0.1`** with **encrypted** `keypair.json`.  
+  Do not use older clear‑text wallet formats.
+
 ## SC‑Bridge (WebSocket) Protocol
 SC‑Bridge exposes sidechannel messages over WebSocket and accepts inbound commands.
 It is the **primary way for agents to read and place sidechannel messages**. Humans can use the interactive TTY, but agents should prefer sockets.
