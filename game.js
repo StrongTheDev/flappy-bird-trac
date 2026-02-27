@@ -52,8 +52,9 @@ const GameState = {
 
 const BASE_WIDTH = 720;
 const BASE_HEIGHT = 500;
-const GRAVITY = 0.28;
-const FLAP_STRENGTH = -6.8;
+const GAME_SPEED_SCALE = 0.3;
+const GRAVITY = 0.41;
+const FLAP_STRENGTH = -2.3;
 const PIPE_WIDTH = 74;
 const GROUND_HEIGHT = 58;
 const COIN_RADIUS = 10;
@@ -428,16 +429,17 @@ function spawnCoin(pipe) {
 
 function updateGame(delta) {
   if (state.status !== GameState.Playing) return;
-  const speed = 2.6 + Math.min(state.currentScore * 0.02, 3.4);
+  const scaledDelta = delta * GAME_SPEED_SCALE;
+  const speed = (2.6 + Math.min(state.currentScore * 0.02, 3.4)) * GAME_SPEED_SCALE;
   const spacing = clamp(115 - state.currentScore * 0.4, 70, 110);
-  state.spawnMeter += speed * delta * 12;
+  state.spawnMeter += speed * scaledDelta * 12;
   if (state.spawnMeter >= spacing) {
     spawnPipe();
     state.spawnMeter = 0;
   }
 
-  state.bird.velocity += GRAVITY * delta;
-  state.bird.y += state.bird.velocity * delta * 14;
+  state.bird.velocity += GRAVITY * scaledDelta;
+  state.bird.y += state.bird.velocity * scaledDelta * 14;
 
   if (state.bird.y + state.bird.radius >= BASE_HEIGHT - GROUND_HEIGHT) {
     if (triggerDeath()) return;
@@ -447,7 +449,7 @@ function updateGame(delta) {
     state.bird.velocity = 0;
   }
 
-  const moveDistance = speed * delta * 16;
+  const moveDistance = speed * scaledDelta * 16;
   for (const pipe of state.pipes) {
     pipe.x -= moveDistance;
     if (!pipe.scored && pipe.x + pipe.width < state.bird.x) {
