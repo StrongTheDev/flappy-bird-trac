@@ -38,6 +38,8 @@ This folder contains a web-native Flappy Bird remix inspired by the Trac competi
 - Future work: connect upgrades to smart contracts, publish leaderboard updates via a sidechannel bridge, and wire multiplayer matchmaking through Intercom.
 
 ## Proof
+[Proof Video](proof/videos/proof.mp4).
+
 <video controls width="640">
     <source src="proof/videos/proof.mp4" type="video/mp4">
     Your browser does not support the video tag.
