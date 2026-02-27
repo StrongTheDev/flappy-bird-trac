@@ -36,3 +36,9 @@ This folder contains a web-native Flappy Bird remix inspired by the Trac competi
 ## Testing & next steps
 - No automated tests yet; exercise the canvas manually and confirm coins, upgrades, skin selection, and leaderboard entries persist.
 - Future work: connect upgrades to smart contracts, publish leaderboard updates via a sidechannel bridge, and wire multiplayer matchmaking through Intercom.
+
+## Proof
+<video controls width="640">
+    <source src="proof/videos/proof.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
