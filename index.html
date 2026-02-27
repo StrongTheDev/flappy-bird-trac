@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flappy Bird — Trac Network</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <div>
+        <p class="logo">Trac <span>Flappy Bird</span></p>
+        <p class="subtitle">Web3 arcade &amp; upgrade loop running on Intercom</p>
+      </div>
+      <div class="wallet-panel">
+        <button type="button" id="walletButton">Connect Wallet</button>
+        <p id="walletStatus">wallet idle</p>
+      </div>
+    </header>
+
+    <main>
+      <section class="game-column">
+        <div class="canvas-frame">
+          <canvas id="gameCanvas" width="720" height="500"></canvas>
+          <div class="game-overlay" id="overlayText">Press Space / Tap to flap</div>
+        </div>
+        <div class="hud-grid">
+          <div class="hud-card">
+            <span class="label">score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div class="hud-card">
+            <span class="label">coins</span>
+            <strong id="coinsValue">0 TNK</strong>
+          </div>
+          <div class="hud-card">
+            <span class="label">lives</span>
+            <strong id="livesValue">1</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="sidebar">
+        <div class="panel upgrade-panel">
+          <div class="panel-header">
+            <p class="panel-title">Upgrade Station</p>
+            <p class="panel-sub">Spend TNK to boost coins or add lives</p>
+          </div>
+          <div class="panel-body">
+            <div class="upgrade-row">
+              <div>
+                <p class="upgrade-label">Coin multiplier</p>
+                <p class="upgrade-info" id="multiplierInfo">2x (Level 1)</p>
+              </div>
+              <button type="button" id="multiplierButton">Upgrade</button>
+            </div>
+            <div class="upgrade-row">
+              <div>
+                <p class="upgrade-label">Extra lives</p>
+                <p class="upgrade-info" id="extraLifeInfo">1 / 5</p>
+              </div>
+              <button type="button" id="livesButton">Buy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel skin-panel">
+          <div class="panel-header">
+            <p class="panel-title">Skins &amp; NFTs</p>
+            <p class="panel-sub">15 collectible birds on-chain</p>
+          </div>
+          <div class="skin-grid" id="skinGrid"></div>
+        </div>
+
+        <div class="panel leaderboard-panel">
+          <div class="panel-header">
+            <p class="panel-title">Leaderboard</p>
+            <p class="panel-sub">On-chain style scores</p>
+          </div>
+          <ol id="leaderboardList" class="leaderboard-list"></ol>
+        </div>
+
+        <div class="panel notes-panel">
+          <div class="panel-header">
+            <p class="panel-title">Trac Network</p>
+          </div>
+          <div class="panel-body">
+            <p>Sidechannel: <strong>0000intercom</strong></p>
+            <p>TNK staking powers every upgrade and coin pickup.</p>
+            <p>NFT mint bridge: <strong>trac1ee69dcdf76s4xxd84en9l7hwkjekmccw8ysv69yvxeky75nr645s2uhptk</strong></p>
+            <p>Leaderboard proof is collected locally; export JSON to share via Intercom.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>

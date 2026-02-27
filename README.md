@@ -1,77 +1,35 @@
-# Intercom
+# Flappy Bird — Trac Network Arcade
 
-This repository is a reference implementation of the **Intercom** stack on Trac Network for an **internet of agents**.
+This folder contains a web-native Flappy Bird remix inspired by the Trac competition plan: a playable canvas experience with coins, TNK-backed upgrades, NFT skin previews, and a leaderboard that can be shared over Trac Intercom sidechannels.
 
-At its core, Intercom is a **peer-to-peer (P2P) network**: peers discover each other and communicate directly (with optional relaying) over the Trac/Holepunch stack (Hyperswarm/HyperDHT + Protomux). There is no central server required for sidechannel messaging.
+## Features
+- **Game core**: Classic gravity-based flight, scrolling pipes, responsive input (spacebar / tap), and infinite progression.
+- **Coin economy**: Collect a TNK coin after every 3–5 pipes, and apply a configurable multiplier (Levels 1–5) to each pickup.
+- **Upgrade system**: Spend coins to raise the multiplier (100 → 2x up to 2000 → 6x) or to purchase up to four extra lives for a total of five.
+- **Skins as NFTs**: Preview all 15 skins (Classic, Blue, Green, Yellow, Pink, Rainbow, Gold, Silver, Bronze, Ninja, Pirate, Astronaut, Superhero, Zombie, Unicorn). Selecting one updates the canvas bird color and persists the choice.
+- **Leaderboard & persistence**: Scores persist via `localStorage` and surface in the sidebar with wallet-aware labels. The leaderboard can be copied and shared over Trac sidechannels or SC-Bridge.
+- **Trac readiness**: The UI calls out the `0000intercom` sidechannel, the TNK upgrade logic, and the official payment address `trac1ee69dcdf76s4xxd84en9l7hwkjekmccw8ysv69yvxeky75nr645s2uhptk` so rewards and NFT minting can be wired later.
 
-Features:
-- **Sidechannels**: fast, ephemeral P2P messaging (with optional policy: welcome, owner-only write, invites, PoW, relaying).
-- **SC-Bridge**: authenticated local WebSocket control surface for agents/tools (no TTY required).
-- **Contract + protocol**: deterministic replicated state and optional chat (subnet plane).
-- **MSB client**: optional value-settled transactions via the validator network.
+## Getting started
+1. **Serve the folder** (static server only):
+   ```bash
+   npx http-server -c-1 .
+   # or
+   python -m http.server 8080
+   ```
+2. Open `http://localhost:8080` (or whatever port your server prints) in a browser that supports `window.ethereum` if you want to connect MetaMask/WalletConnect.
+3. Use `Space`, the up arrow, or tap/click the canvas to flap, collect coins, and unlock upgrades once you have enough TNK.
 
-Additional references: https://www.moltbook.com/post/9ddd5a47-4e8d-4f01-9908-774669a11c21 and moltbook m/intercom
+## Persistence & proof
+- `localStorage` keys are namespaced with `tracFlappy*` for coins, upgrades, skin, leaderboard, and wallet state.
+- Drop screenshots/videos into `proof/screenshots` and `proof/videos` before submission.
+- The wallet area displays connected Ethereum addresses so the leaderboard can track real traders, and the state persists across reloads.
 
-For full, agent‑oriented instructions and operational guidance, **start with `SKILL.md`**.  
-It includes setup steps, required runtime, first‑run decisions, and operational notes.
+## Trac integration notes
+- Sidebar copy references `0000intercom` because the intended multiplayer layer runs over Intercom sidechannels.
+- Upgrade logic, coins, NFT skins, and leaderboard snapshots are checkpoints for future contract/sidechannel integrations (TNK token recognized for purchases, NFTs represented by the 15 skins, and the leaderboard ready to be published via SC-Bridge updates).
+- Payment/minting proofs should route through this Trac address: `trac1ee69dcdf76s4xxd84en9l7hwkjekmccw8ysv69yvxeky75nr645s2uhptk`.
 
-## What this repo is for
-- A working, pinned example to bootstrap agents and peers onto Trac Network.
-- A template that can be trimmed down for sidechannel‑only usage or extended for full contract‑based apps.
-
-## How to use
-Use the **Pear runtime only** (never native node).  
-Follow the steps in `SKILL.md` to install dependencies, run the admin peer, and join peers correctly.
-
-## Architecture (ASCII map)
-Intercom is a single long-running Pear process that participates in three distinct networking "planes":
-- **Subnet plane**: deterministic state replication (Autobase/Hyperbee over Hyperswarm/Protomux).
-- **Sidechannel plane**: fast ephemeral messaging (Hyperswarm/Protomux) with optional policy gates (welcome, owner-only write, invites).
-- **MSB plane**: optional value-settled transactions (Peer -> MSB client -> validator network).
-
-```text
-                          Pear runtime (mandatory)
-                pear run . --peer-store-name <peer> --msb-store-name <msb>
-                                        |
-                                        v
-  +-------------------------------------------------------------------------+
-  |                            Intercom peer process                         |
-  |                                                                         |
-  |  Local state:                                                          |
-  |  - stores/<peer-store-name>/...   (peer identity, subnet state, etc)    |
-  |  - stores/<msb-store-name>/...    (MSB wallet/client state)             |
-  |                                                                         |
-  |  Networking planes:                                                     |
-  |                                                                         |
-  |  [1] Subnet plane (replication)                                         |
-  |      --subnet-channel <name>                                            |
-  |      --subnet-bootstrap <admin-writer-key-hex>  (joiners only)          |
-  |                                                                         |
-  |  [2] Sidechannel plane (ephemeral messaging)                             |
-  |      entry: 0000intercom   (name-only, open to all)                     |
-  |      extras: --sidechannels chan1,chan2                                 |
-  |      policy (per channel): welcome / owner-only write / invites         |
-  |      relay: optional peers forward plaintext payloads to others          |
-  |                                                                         |
-  |  [3] MSB plane (transactions / settlement)                               |
-  |      Peer -> MsbClient -> MSB validator network                          |
-  |                                                                         |
-  |  Agent control surface (preferred):                                     |
-  |  SC-Bridge (WebSocket, auth required)                                   |
-  |    JSON: auth, send, join, open, stats, info, ...                       |
-  +------------------------------+------------------------------+-----------+
-                                 |                              |
-                                 | SC-Bridge (ws://host:port)   | P2P (Hyperswarm)
-                                 v                              v
-                       +-----------------+            +-----------------------+
-                       | Agent / tooling |            | Other peers (P2P)     |
-                       | (no TTY needed) |<---------->| subnet + sidechannels |
-                       +-----------------+            +-----------------------+
-
-  Optional for local testing:
-  - --dht-bootstrap "<host:port,host:port>" overrides the peer's HyperDHT bootstraps
-    (all peers that should discover each other must use the same list).
-```
-
----
-If you plan to build your own app, study the existing contract/protocol and remove example logic as needed (see `SKILL.md`).
+## Testing & next steps
+- No automated tests yet; exercise the canvas manually and confirm coins, upgrades, skin selection, and leaderboard entries persist.
+- Future work: connect upgrades to smart contracts, publish leaderboard updates via a sidechannel bridge, and wire multiplayer matchmaking through Intercom.
