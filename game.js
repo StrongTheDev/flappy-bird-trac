@@ -389,10 +389,12 @@ function handleInteraction() {
   if (state.status === GameState.LifeLost) {
     state.status = GameState.Playing;
     setOverlay('');
+    flapBird();
     return;
   }
   if (state.status === GameState.GameOver || state.status === GameState.Idle) {
     startRun(true);
+    flapBird();
   }
 }
 
