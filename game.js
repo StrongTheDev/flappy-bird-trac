@@ -303,7 +303,7 @@ function connectWallet() {
         updateWalletStatus();
       });
   } else {
-    walletStatus.textContent = 'MetaMask / WalletConnect needed';
+    walletStatus.textContent = 'MetaMask / WalletConnect supported (not required)';
   }
 }
 
