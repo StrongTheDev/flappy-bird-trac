@@ -174,7 +174,7 @@ function randomInt(min, max) {
 }
 
 function formatCurrency(value) {
-  return `${value.toLocaleString('en-US')} TNK`;
+  return `${value.toLocaleString('en-US')} TNKc`;
 }
 
 function formatAddress(address) {
@@ -216,7 +216,7 @@ function updateUpgradeUI() {
     multiplierInfo.textContent = `${currentTier.multiplier}x (Level ${currentTier.level})`;
   }
   if (nextTier) {
-    multiplierButton.textContent = `Upgrade (${nextTier.multiplier}x ≈ ${nextTier.price} TNK)`;
+    multiplierButton.textContent = `Upgrade (${nextTier.multiplier}x ≈ ${nextTier.price} TNKc)`;
     multiplierButton.disabled = state.coins < nextTier.price;
   } else {
     multiplierButton.textContent = 'Maxed';
@@ -227,7 +227,7 @@ function updateUpgradeUI() {
   extraLifeInfo.textContent = `${1 + bought} / 5 lives`;
   const nextCost = extraLifeCosts[bought];
   if (nextCost && bought < extraLifeCosts.length) {
-    livesButton.textContent = `Buy extra (${nextCost} TNK)`;
+    livesButton.textContent = `Buy extra (${nextCost} TNKc)`;
     livesButton.disabled = state.coins < nextCost;
   } else {
     livesButton.textContent = 'Lives maxed';
@@ -601,3 +601,5 @@ function resizeCanvas() {
 }
 
 init();
+// Isaiah 43 (BSB):
+// [18] “Do not call to mind the former things; pay no attention to the things of old. 
